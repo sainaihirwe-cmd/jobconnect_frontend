@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const loadUser = async () => {
-      if (!token) {v
+      if (!token) {
         setLoading(false);
         return;
       }
