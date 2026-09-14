@@ -3,6 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 
+const apiOrigin = api.defaults.baseURL.replace(/\/api\/?$/, '');
+const getFileUrl = (filePath) => (filePath?.startsWith('http') ? filePath : `${apiOrigin}${filePath}`);
+
 export default function ApplicantDetailPage({ t }) {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -133,7 +136,7 @@ export default function ApplicantDetailPage({ t }) {
             )}
             {application.cv && (
               <div style={{ marginTop: '12px' }}>
-                <a href={`http://localhost:5000${application.cv}`} target="_blank" rel="noreferrer" className="btn btn-primary">
+                <a href={getFileUrl(application.cv)} target="_blank" rel="noreferrer" className="btn btn-primary">
                   Download CV
                 </a>
               </div>
@@ -148,7 +151,7 @@ export default function ApplicantDetailPage({ t }) {
                 <div className="portfolio-section"><strong>Skills</strong><div className="portfolio-chips">{(applicantProfile.skills || []).length ? applicantProfile.skills.map((skill) => <span key={skill}>{skill}</span>) : <small>No skills listed.</small>}</div></div>
                 <div className="portfolio-section"><strong>Education</strong>{(applicantProfile.education || []).length ? applicantProfile.education.map((item) => <div className="portfolio-entry" key={item._id || `${item.institution}-${item.degree}`}><b>{item.degree || 'Education'}</b><span>{item.institution} {item.field ? `• ${item.field}` : ''}</span></div>) : <small>No education listed.</small>}</div>
                 <div className="portfolio-section"><strong>Experience</strong>{(applicantProfile.workExperience || []).length ? applicantProfile.workExperience.map((item) => <div className="portfolio-entry" key={item._id || `${item.company}-${item.role}`}><b>{item.role || 'Experience'}</b><span>{item.company} {item.location ? `• ${item.location}` : ''}</span><small>{item.description}</small></div>) : <small>No experience listed.</small>}</div>
-                {applicantProfile.cv && <a href={`http://localhost:5000${applicantProfile.cv}`} target="_blank" rel="noreferrer" className="btn btn-secondary">Open portfolio CV</a>}
+                {applicantProfile.cv && <a href={getFileUrl(applicantProfile.cv)} target="_blank" rel="noreferrer" className="btn btn-secondary">Open portfolio CV</a>}
               </>
             ) : <p className="empty-state">This applicant has not completed a portfolio yet.</p>}
           </div>
